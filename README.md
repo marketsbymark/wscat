@@ -1,14 +1,27 @@
 # wscat
 
-WebSocket cat.
+A Node.js command-line tool for sending and receiving WebSocket messages, either as a client or as a simple listener.
+
+This is a fork of [websockets/wscat](https://github.com/websockets/wscat). The checked-in [package.json](package.json) identifies this snapshot as version `5.1.0`.
 
 ## Installation
 
-This module needs to be installed globally so use the `-g` flag when installing:
+Node.js and npm are required. To install the published package globally:
 
 ```
 npm install -g wscat
 ```
+
+To run this fork from source instead:
+
+```sh
+git clone https://github.com/marketsbymark/wscat.git
+cd wscat
+npm install
+node bin/wscat --help
+```
+
+Use `node bin/wscat` in place of `wscat` in the examples when running from this checkout. Installing the published package does not necessarily install this fork's version.
 
 ## Usage
 
@@ -42,16 +55,29 @@ Options:
   -h, --help                          display help for command
 ```
 
-## Example
+## Local example
 
+In one terminal, start a listener:
+
+```sh
+wscat --listen 8765
 ```
-$ wscat -c ws://echo.websocket.org
-Connected (press CTRL+C to quit)
-> hi there
-< hi there
-> are you a happy parrot?
-< are you a happy parrot?
+
+In a second terminal, connect to it:
+
+```sh
+wscat --connect ws://127.0.0.1:8765
 ```
+
+Type a message and press Enter in either terminal; it appears in the other terminal. The listener is not an automatic echo server. Press Ctrl+C to stop each process.
+
+**Listener safety:** This version's listener does not explicitly bind to loopback and may be reachable from other interfaces. Use a trusted development environment and restrict access with your firewall. The `--host` option sets the client Host header; it does not restrict the listener's bind address.
+
+For remote connections, use a server you control or are authorized to test. Keep TLS verification enabled; `--no-check` disables certificate validation.
+
+## Development checks
+
+The `npm test` script in this snapshot only prints “No test specified”; it does not run an automated test suite. A manual two-terminal exchange can be used as a basic smoke check.
 
 ## License
 
